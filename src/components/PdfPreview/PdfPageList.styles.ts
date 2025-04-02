@@ -4,7 +4,8 @@ export const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  height: 100%;
+  overflow: hidden;
 
   & > div {
     padding: 12px;
@@ -24,12 +25,13 @@ export const TopSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-x: hidden;
   overflow-y: auto;
+  overflow-x: hidden;
   gap: 12px;
   flex: 1;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 24px);
+  padding-right: 4px;
 `;
 
 interface ImageContainerProps {
