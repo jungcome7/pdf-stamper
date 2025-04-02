@@ -19,14 +19,13 @@ const useRenderPdfToCanvas = (
   file: File | null,
   canvasRef: React.RefObject<HTMLCanvasElement | null>
 ) => {
-  const { currentPage } = useStore();
+  const { currentPage, setIsRendering } = useStore();
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
   const [error, setError] = useState<{ message: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<
     { pageNumber: number; imageUrl: string }[]
   >([]);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // PDF 페이지 가져오기
   useEffect(() => {
@@ -36,46 +35,42 @@ const useRenderPdfToCanvas = (
     }
 
     setIsLoading(true);
-    let isMounted = true;
+    setIsRendering(true);
 
     const loadPages = async () => {
       try {
         const pagesData = await getPdfPagesAsImages(file);
-        if (isMounted) {
-          setPages(pagesData);
-          setIsLoading(false);
-        }
+        setPages(pagesData);
+        setIsLoading(false);
+        setIsRendering(false);
       } catch {
-        if (isMounted) {
-          setError({
-            message: "PDF 페이지를 불러오는 중 오류가 발생했습니다.",
-          });
-          setIsLoading(false);
-        }
+        setError({
+          message: "PDF 페이지를 불러오는 중 오류가 발생했습니다.",
+        });
+        setIsLoading(false);
+        setIsRendering(false);
       }
     };
 
     loadPages();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [file]);
+  }, [file, setIsRendering]);
 
   // 캔버스에 현재 페이지 렌더링
   useEffect(() => {
     if (!file || !canvasRef.current || pages.length === 0) return;
 
+    // 페이지 전환 시에도 로딩 표시
+    setIsLoading(true);
+    setIsRendering(true);
+    setError(null);
+
     const currentPageData = pages.find(
       (page) => page.pageNumber === currentPage
     );
-    if (!currentPageData) return;
-
-    // 첫 로딩 이후에는 페이지 전환 시 로딩 표시 안함
-    if (!isInitialLoad) {
-      setError(null);
-    } else {
-      setIsInitialLoad(false);
+    if (!currentPageData) {
+      setIsLoading(false);
+      setIsRendering(false);
+      return;
     }
 
     if (fabricCanvasRef.current) {
@@ -91,6 +86,8 @@ const useRenderPdfToCanvas = (
       });
     } catch {
       setError({ message: "캔버스를 초기화하는 중 오류가 발생했습니다." });
+      setIsLoading(false);
+      setIsRendering(false);
       return;
     }
 
@@ -100,6 +97,8 @@ const useRenderPdfToCanvas = (
 
         if (!imageDataUrl || !fabricCanvasRef.current) {
           setError({ message: "이미지 데이터를 찾을 수 없습니다." });
+          setIsLoading(false);
+          setIsRendering(false);
           return;
         }
 
@@ -110,6 +109,8 @@ const useRenderPdfToCanvas = (
         imgElement.onload = () => {
           if (!fabricCanvasRef.current) {
             setError({ message: "캔버스가 준비되지 않았습니다." });
+            setIsLoading(false);
+            setIsRendering(false);
             return;
           }
 
@@ -136,18 +137,25 @@ const useRenderPdfToCanvas = (
             fabricCanvasRef.current.backgroundImage = fabricImage;
             fabricCanvasRef.current.renderAll();
             setIsLoading(false);
+            setIsRendering(false);
           } catch {
             setError({
               message: "이미지를 캔버스에 표시하는 중 오류가 발생했습니다.",
             });
+            setIsLoading(false);
+            setIsRendering(false);
           }
         };
 
         imgElement.onerror = () => {
           setError({ message: "이미지 로딩 중 오류가 발생했습니다." });
+          setIsLoading(false);
+          setIsRendering(false);
         };
       } catch {
         setError({ message: "PDF 렌더링 중 오류가 발생했습니다." });
+        setIsLoading(false);
+        setIsRendering(false);
       }
     };
 
@@ -159,7 +167,7 @@ const useRenderPdfToCanvas = (
         fabricCanvasRef.current = null;
       }
     };
-  }, [file, canvasRef, currentPage, pages, isInitialLoad]);
+  }, [file, canvasRef, currentPage, pages, setIsRendering]);
 
   return { fabricCanvasRef, error, isLoading };
 };

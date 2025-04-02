@@ -12,7 +12,7 @@ type PdfPage = {
  * @returns PDF 페이지 이미지 배열
  */
 const usePdfPages = () => {
-  const { file, currentPage, setCurrentPage } = useStore();
+  const { file } = useStore();
   const [pages, setPages] = useState<PdfPage[]>([]);
 
   useEffect(() => {
@@ -22,14 +22,14 @@ const usePdfPages = () => {
     }
 
     (async () => {
-      const pagesData = await getPdfPagesAsImages(file);
-      setPages(pagesData);
-      // 페이지 로드 완료 후 첫 번째 페이지 선택
-      if (pagesData.length > 0 && currentPage > pagesData.length) {
-        setCurrentPage(1);
+      try {
+        const pagesData = await getPdfPagesAsImages(file);
+        setPages(pagesData);
+      } catch (error) {
+        console.error("페이지 로딩 중 오류 발생:", error);
       }
     })();
-  }, [file, currentPage, setCurrentPage]);
+  }, [file]);
 
   return pages;
 };

@@ -13,7 +13,9 @@ const PdfPageList = () => {
   const pages = usePdfPages();
 
   const handlePageClick = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
+    if (pageNumber !== currentPage) {
+      setCurrentPage(pageNumber);
+    }
   };
 
   return (
