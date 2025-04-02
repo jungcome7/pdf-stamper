@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import { useStore } from "@/store";
-import { getImageByFile } from "@/utils";
+import { usePdfPages } from "@/hooks";
 import {
   Container,
   TopSection,
@@ -8,30 +6,30 @@ import {
   Image,
   ImageIndex,
 } from "./PdfPageList.styles";
+import { useStore } from "@/store";
 
 const PdfPageList = () => {
-  const { file } = useStore();
-  const [fileImage, setFileImage] = useState<string | null>(null);
+  const { currentPage, setCurrentPage } = useStore();
+  const pages = usePdfPages();
 
-  useEffect(() => {
-    if (!file) return;
-
-    (async () => {
-      setFileImage((await getImageByFile(file)) ?? "");
-    })();
-  }, [file]);
+  const handlePageClick = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <Container>
       <TopSection>
-        {fileImage && (
-          <div>
-            <ImageContainer>
-              <Image src={fileImage} />
+        {pages.map((page) => (
+          <div
+            key={page.pageNumber}
+            onClick={() => handlePageClick(page.pageNumber)}
+          >
+            <ImageContainer isSelected={currentPage === page.pageNumber}>
+              <Image src={page.imageUrl} alt={`Page ${page.pageNumber}`} />
             </ImageContainer>
-            <ImageIndex>1</ImageIndex>
+            <ImageIndex>{page.pageNumber}</ImageIndex>
           </div>
-        )}
+        ))}
       </TopSection>
     </Container>
   );

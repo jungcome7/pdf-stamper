@@ -32,7 +32,11 @@ export const TopSection = styled.div`
   height: 100%;
 `;
 
-export const ImageContainer = styled.div`
+interface ImageContainerProps {
+  isSelected: boolean;
+}
+
+export const ImageContainer = styled.div<ImageContainerProps>`
   cursor: pointer;
   display: flex;
   flex: 0 0 auto;
@@ -41,6 +45,13 @@ export const ImageContainer = styled.div`
   width: 160px;
   border-radius: 12px;
   background-color: aliceblue;
+  border: ${(props) => (props.isSelected ? "2px solid #4285f4" : "none")};
+  box-shadow: ${(props) =>
+    props.isSelected ? "0 0 8px rgba(66, 133, 244, 0.6)" : "none"};
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 export const Image = styled.img`
@@ -53,4 +64,28 @@ export const ImageIndex = styled.div`
   justify-content: center;
   padding: 4px 0;
   font-size: 12px;
+`;
+
+export const LoadingMessage = styled.div`
+  padding: 16px;
+  text-align: center;
+  color: #555;
+  width: 100%;
+`;
+
+export const ErrorMessage = styled.div`
+  padding: 16px;
+  text-align: center;
+  color: #d32f2f;
+  background-color: #fff3f3;
+  border-radius: 8px;
+  margin: 16px 0;
+  width: 80%;
+`;
+
+export const EmptyMessage = styled.div`
+  padding: 16px;
+  text-align: center;
+  color: #777;
+  width: 100%;
 `;
