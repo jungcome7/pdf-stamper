@@ -10,6 +10,7 @@ import {
   Button,
   RemoveButton,
 } from "./ControlPanel.styles";
+import { STAMP_DRAW_EVENT } from "@/constants";
 
 const ControlPanel = () => {
   const { file, setFile, selectedStampId } = useStore();
@@ -45,9 +46,15 @@ const ControlPanel = () => {
       return;
     }
 
-    // 도장 찍기 로직 구현 (아직 미구현)
-    console.log("선택된 도장:", selectedStampId);
+    if (!file) {
+      alert("PDF를 먼저 업로드해주세요.");
+      return;
+    }
+
+    document.dispatchEvent(new CustomEvent(STAMP_DRAW_EVENT));
   };
+
+  const isStampButtonDisabled = !selectedStampId || !file;
 
   return (
     <Container>
@@ -87,7 +94,11 @@ const ControlPanel = () => {
         <Button
           type="button"
           onClick={handleStampDraw}
-          disabled={!selectedStampId}
+          disabled={isStampButtonDisabled}
+          style={{
+            opacity: isStampButtonDisabled ? 0.5 : 1,
+            cursor: isStampButtonDisabled ? "not-allowed" : "pointer",
+          }}
         >
           도장 찍기
         </Button>
