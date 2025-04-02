@@ -4,7 +4,12 @@ import { useStore } from "@/store";
 import * as fabric from "fabric";
 
 import { getImageByFile } from "@/utils";
-import "./PdfCanvas.css";
+import {
+  Container,
+  CanvasWrapper,
+  Canvas,
+  DownloadButton,
+} from "./PdfCanvas.styles";
 
 const FABRIC_CANVAS_WIDTH = 500;
 const FABRIC_CANVAS_HEIGHT = parseFloat(
@@ -43,15 +48,15 @@ const PdfCanvas = () => {
   }, [file]);
 
   return (
-    <div className="B">
-      <div>
-        <canvas ref={canvasRef} />
+    <Container>
+      <CanvasWrapper>
+        <Canvas ref={canvasRef} />
 
-        <button type="button" onClick={handlePDFDownload}>
+        <DownloadButton type="button" onClick={handlePDFDownload}>
           PDF 다운로드
-        </button>
-      </div>
-    </div>
+        </DownloadButton>
+      </CanvasWrapper>
+    </Container>
   );
 };
 

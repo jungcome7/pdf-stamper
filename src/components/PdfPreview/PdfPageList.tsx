@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { useStore } from "@/store";
-
-import "./PdfPageList.css";
 import { getImageByFile } from "@/utils";
+import {
+  Container,
+  TopSection,
+  ImageContainer,
+  Image,
+  ImageIndex,
+} from "./PdfPageList.styles";
 
 const PdfPageList = () => {
   const { file } = useStore();
@@ -17,18 +22,18 @@ const PdfPageList = () => {
   }, [file]);
 
   return (
-    <div className="C">
-      <div className="top">
+    <Container>
+      <TopSection>
         {fileImage && (
           <div>
-            <div className="image">
-              <img src={fileImage} />
-            </div>
-            <div className="imageIndex">1</div>
+            <ImageContainer>
+              <Image src={fileImage} />
+            </ImageContainer>
+            <ImageIndex>1</ImageIndex>
           </div>
         )}
-      </div>
-    </div>
+      </TopSection>
+    </Container>
   );
 };
 

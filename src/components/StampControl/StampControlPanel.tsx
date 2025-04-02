@@ -1,8 +1,17 @@
 import { useRef } from "react";
 import { useStore } from "@/store";
-
-import "./StampControlPanel.css";
 import Stamp1 from "@/assets/stamp-1.jpg";
+import {
+  Container,
+  TopSection,
+  StampUploadArea,
+  StampsContainer,
+  PdfUploadArea,
+  PdfFileArea,
+  BottomSection,
+  Button,
+  RemoveButton,
+} from "./StampControlPanel.styles";
 
 const StampControlPanel = () => {
   const { file, setFile } = useStore();
@@ -33,10 +42,10 @@ const StampControlPanel = () => {
   const handleStampDraw = async () => {};
 
   return (
-    <div className="A">
-      <div className="top">
+    <Container>
+      <TopSection>
         <div>
-          <div className="pdfUpload">
+          <PdfUploadArea>
             <input
               ref={pdfInputRef}
               type="file"
@@ -44,29 +53,25 @@ const StampControlPanel = () => {
               style={{ display: "none" }}
             />
 
-            <button type="button" onClick={handlePDFUpload}>
+            <Button type="button" onClick={handlePDFUpload}>
               PDF 업로드
-            </button>
-          </div>
+            </Button>
+          </PdfUploadArea>
 
-          <div className="pdfFile">
+          <PdfFileArea>
             {!!file?.name && (
               <>
                 📄 파일명: <strong>{file?.name}</strong>
-                <button
-                  type="button"
-                  className="pdfFileRemove"
-                  onClick={handlePDFRemove}
-                >
+                <RemoveButton type="button" onClick={handlePDFRemove}>
                   X
-                </button>
+                </RemoveButton>
               </>
             )}
-          </div>
+          </PdfFileArea>
         </div>
 
         <div>
-          <div className="stampUpload">
+          <StampUploadArea>
             <input
               ref={stampInputRef}
               type="file"
@@ -74,23 +79,23 @@ const StampControlPanel = () => {
               onChange={() => {}}
               style={{ display: "none" }}
             />
-            <button type="button" onClick={handleStampUpload}>
+            <Button type="button" onClick={handleStampUpload}>
               도장 업로드
-            </button>
-          </div>
+            </Button>
+          </StampUploadArea>
 
-          <div className="stamps">
+          <StampsContainer>
             <img src={Stamp1} />
-          </div>
+          </StampsContainer>
         </div>
-      </div>
+      </TopSection>
 
-      <div className="bottom">
-        <button type="button" onClick={handleStampDraw}>
+      <BottomSection>
+        <Button type="button" onClick={handleStampDraw}>
           도장 찍기
-        </button>
-      </div>
-    </div>
+        </Button>
+      </BottomSection>
+    </Container>
   );
 };
 
