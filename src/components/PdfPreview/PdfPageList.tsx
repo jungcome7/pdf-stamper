@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useStore } from "@/store";
 
-import "./C.css";
-import { getImageByFile } from "./utils";
+import "./PdfPageList.css";
+import { getImageByFile } from "@/utils";
 
-const C = () => {
+const PdfPageList = () => {
   const { file } = useStore();
   const [fileImage, setFileImage] = useState<string | null>(null);
 
@@ -32,4 +32,4 @@ const C = () => {
   );
 };
 
-export default C;
+export default PdfPageList;

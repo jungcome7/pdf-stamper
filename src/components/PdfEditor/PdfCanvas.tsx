@@ -3,15 +3,15 @@ import { useStore } from "@/store";
 
 import * as fabric from "fabric";
 
-import { getImageByFile } from "./utils";
-import "./B.css";
+import { getImageByFile } from "@/utils";
+import "./PdfCanvas.css";
 
 const FABRIC_CANVAS_WIDTH = 500;
 const FABRIC_CANVAS_HEIGHT = parseFloat(
   (FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2)
 );
 
-const B = () => {
+const PdfCanvas = () => {
   const { file } = useStore();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -55,4 +55,4 @@ const B = () => {
   );
 };
 
-export default B;
+export default PdfCanvas;

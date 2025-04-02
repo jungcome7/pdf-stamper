@@ -1,6 +1,6 @@
-import A from "./A";
-import B from "./B";
-import C from "./C";
+import StampControlPanel from "@/components/StampControl/StampControlPanel";
+import PdfCanvas from "@/components/PdfEditor/PdfCanvas";
+import PdfPageList from "@/components/PdfPreview/PdfPageList";
 
 import "./App.css";
 
@@ -8,9 +8,9 @@ function App() {
   return (
     <div id="app">
       <div>
-        <A />
-        <B />
-        <C />
+        <StampControlPanel />
+        <PdfCanvas />
+        <PdfPageList />
       </div>
     </div>
   );

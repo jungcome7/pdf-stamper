@@ -1,10 +1,10 @@
 import { useRef } from "react";
 import { useStore } from "@/store";
 
-import "./A.css";
-import Stamp1 from "./files/stamp-1.jpg";
+import "./StampControlPanel.css";
+import Stamp1 from "@/assets/stamp-1.jpg";
 
-const A = () => {
+const StampControlPanel = () => {
   const { file, setFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
@@ -94,4 +94,4 @@ const A = () => {
   );
 };
 
-export default A;
+export default StampControlPanel;
