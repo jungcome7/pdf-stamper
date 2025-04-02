@@ -22,7 +22,15 @@ const ControlPanel = () => {
   const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
-    setFile(file!);
+    if (!file) {
+      throw new Error("PDF 파일을 선택해주세요.");
+    }
+
+    if (!file.type.includes("pdf")) {
+      throw new Error("PDF 파일만 업로드 가능합니다.");
+    }
+
+    setFile(file);
 
     e.target.value = "";
   };
@@ -49,6 +57,7 @@ const ControlPanel = () => {
             <input
               ref={pdfInputRef}
               type="file"
+              accept=".pdf,application/pdf"
               onChange={handlePDFChange}
               style={{ display: "none" }}
             />
