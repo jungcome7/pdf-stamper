@@ -1,0 +1,25 @@
+.B {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+}
+
+.B canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.B button {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+
+  padding: 8px 12px;
+  border-radius: 12px;
+
+  background-color: #5e5e5e;
+}

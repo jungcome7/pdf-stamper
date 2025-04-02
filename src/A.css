@@ -1,0 +1,66 @@
+.A {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.A > div {
+  padding: 12px;
+}
+
+.A .top {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.A .top .stampUpload {
+  min-height: 48px;
+}
+
+.A .top .stamps {
+  display: flex;
+  gap: 8px;
+
+  min-height: 54px;
+}
+
+.A .top .stamps img {
+  cursor: pointer;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 4px;
+}
+
+.A .top .pdfUpload {
+  min-height: 48px;
+}
+
+.A .top .pdfFile {
+  min-height: 48px;
+}
+
+.A .bottom {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 12px;
+}
+
+.A button {
+  padding: 8px 12px;
+  border-radius: 12px;
+
+  background-color: #5e5e5e;
+}
+
+.A button.pdfFileRemove {
+  padding: 4px 8px;
+
+  background-color: transparent;
+
+  color: #5e5e5e;
+  font-size: 16px;
+}
