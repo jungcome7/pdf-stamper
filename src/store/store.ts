@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import Stamp1 from "@/assets/stamp-1.jpg";
-import { Stamp } from "@/types";
+import { Stamp, StampInstance } from "@/types";
 
 type Store = {
   file: File | null;
@@ -16,9 +16,13 @@ type Store = {
   removeStamp: (id: string) => void;
   selectedStampId: string | null;
   setSelectedStampId: (id: string | null) => void;
+  stampInstances: StampInstance[];
+  addStampInstance: (instance: StampInstance) => void;
+  removeStampInstance: (instanceId: string) => void;
+  getPageStampInstances: (pageNumber: number) => StampInstance[];
 };
 
-export const useStore = create<Store>((set) => ({
+export const useStore = create<Store>((set, get) => ({
   file: null,
   setFile: (file: File | null) => set({ file }),
   currentPage: 1,
@@ -39,4 +43,20 @@ export const useStore = create<Store>((set) => ({
     })),
   selectedStampId: null,
   setSelectedStampId: (id: string | null) => set({ selectedStampId: id }),
+  stampInstances: [],
+  addStampInstance: (instance: StampInstance) =>
+    set((state) => ({
+      stampInstances: [...state.stampInstances, instance],
+    })),
+  removeStampInstance: (instanceId: string) =>
+    set((state) => ({
+      stampInstances: state.stampInstances.filter(
+        (instance) => instance.id !== instanceId
+      ),
+    })),
+  getPageStampInstances: (pageNumber: number) => {
+    return get().stampInstances.filter(
+      (instance) => instance.pageNumber === pageNumber
+    );
+  },
 }));
