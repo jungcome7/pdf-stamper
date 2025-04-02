@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import StampControlPanel from "@/components/StampControl/StampControlPanel";
+import ControlPanel from "@/components/ControlPanel/ControlPanel";
 import PdfCanvas from "@/components/PdfEditor/PdfCanvas";
 import PdfPageList from "@/components/PdfPreview/PdfPageList";
 import {
   AppContainer,
   ContentWrapper,
-  StampPanelWrapper,
+  ControlPanelWrapper,
   PdfCanvasWrapper,
   PdfPageListWrapper,
 } from "@/App.styles";
@@ -14,9 +14,9 @@ function App() {
   return (
     <AppContainer>
       <ContentWrapper>
-        <StampPanelWrapper>
-          <StampControlPanel />
-        </StampPanelWrapper>
+        <ControlPanelWrapper>
+          <ControlPanel />
+        </ControlPanelWrapper>
         <PdfCanvasWrapper>
           <PdfCanvas />
         </PdfCanvasWrapper>

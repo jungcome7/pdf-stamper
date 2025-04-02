@@ -27,7 +27,7 @@ export const panelStyles = css`
   border-radius: 8px;
 `;
 
-export const StampPanelWrapper = styled.div`
+export const ControlPanelWrapper = styled.div`
   ${panelStyles}
   flex: 0 0 280px;
 `;

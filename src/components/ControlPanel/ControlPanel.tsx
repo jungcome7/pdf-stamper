@@ -11,9 +11,9 @@ import {
   BottomSection,
   Button,
   RemoveButton,
-} from "./StampControlPanel.styles";
+} from "./ControlPanel.styles";
 
-const StampControlPanel = () => {
+const ControlPanel = () => {
   const { file, setFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
@@ -99,4 +99,4 @@ const StampControlPanel = () => {
   );
 };
 
-export default StampControlPanel;
+export default ControlPanel;
