@@ -16,23 +16,6 @@ export const TopSection = styled.div`
   gap: 24px;
 `;
 
-export const StampUploadArea = styled.div`
-  min-height: 48px;
-`;
-
-export const StampsContainer = styled.div`
-  display: flex;
-  gap: 8px;
-  min-height: 54px;
-
-  img {
-    cursor: pointer;
-    width: 48px;
-    height: 48px;
-    border-radius: 4px;
-  }
-`;
-
 export const PdfUploadArea = styled.div`
   min-height: 48px;
 `;

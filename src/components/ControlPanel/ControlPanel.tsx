@@ -1,11 +1,9 @@
 import { useRef } from "react";
 import { useStore } from "@/store";
-import Stamp1 from "@/assets/stamp-1.jpg";
+import StampManager from "./StampManager";
 import {
   Container,
   TopSection,
-  StampUploadArea,
-  StampsContainer,
   PdfUploadArea,
   PdfFileArea,
   BottomSection,
@@ -14,9 +12,7 @@ import {
 } from "./ControlPanel.styles";
 
 const ControlPanel = () => {
-  const { file, setFile } = useStore();
-
-  const stampInputRef = useRef<HTMLInputElement>(null);
+  const { file, setFile, selectedStampId } = useStore();
   const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,10 +31,6 @@ const ControlPanel = () => {
     e.target.value = "";
   };
 
-  const handleStampUpload = () => {
-    stampInputRef.current?.click();
-  };
-
   const handlePDFUpload = () => {
     pdfInputRef.current?.click();
   };
@@ -47,7 +39,15 @@ const ControlPanel = () => {
     setFile(null);
   };
 
-  const handleStampDraw = async () => {};
+  const handleStampDraw = async () => {
+    if (!selectedStampId) {
+      alert("도장을 선택해주세요.");
+      return;
+    }
+
+    // 도장 찍기 로직 구현 (아직 미구현)
+    console.log("선택된 도장:", selectedStampId);
+  };
 
   return (
     <Container>
@@ -79,28 +79,16 @@ const ControlPanel = () => {
           </PdfFileArea>
         </div>
 
-        <div>
-          <StampUploadArea>
-            <input
-              ref={stampInputRef}
-              type="file"
-              accept=".png"
-              onChange={() => {}}
-              style={{ display: "none" }}
-            />
-            <Button type="button" onClick={handleStampUpload}>
-              도장 업로드
-            </Button>
-          </StampUploadArea>
-
-          <StampsContainer>
-            <img src={Stamp1} />
-          </StampsContainer>
-        </div>
+        {/* 도장 관리 컴포넌트 */}
+        <StampManager />
       </TopSection>
 
       <BottomSection>
-        <Button type="button" onClick={handleStampDraw}>
+        <Button
+          type="button"
+          onClick={handleStampDraw}
+          disabled={!selectedStampId}
+        >
           도장 찍기
         </Button>
       </BottomSection>

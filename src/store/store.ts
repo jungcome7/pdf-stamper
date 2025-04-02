@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import Stamp1 from "@/assets/stamp-1.jpg";
+import { Stamp } from "@/types";
 
 type Store = {
   file: File | null;
@@ -9,6 +11,11 @@ type Store = {
   setRequestedPage: (pageNumber: number | null) => void;
   isRendering: boolean;
   setIsRendering: (isRendering: boolean) => void;
+  stamps: Stamp[];
+  addStamp: (stamp: Stamp) => void;
+  removeStamp: (id: string) => void;
+  selectedStampId: string | null;
+  setSelectedStampId: (id: string | null) => void;
 };
 
 export const useStore = create<Store>((set) => ({
@@ -21,4 +28,15 @@ export const useStore = create<Store>((set) => ({
     set({ requestedPage: pageNumber }),
   isRendering: false,
   setIsRendering: (isRendering: boolean) => set({ isRendering }),
+  stamps: [{ id: "default", url: Stamp1 }],
+  addStamp: (stamp: Stamp) =>
+    set((state) => ({
+      stamps: state.stamps.length < 5 ? [...state.stamps, stamp] : state.stamps,
+    })),
+  removeStamp: (id: string) =>
+    set((state) => ({
+      stamps: state.stamps.filter((stamp) => stamp.id !== id),
+    })),
+  selectedStampId: null,
+  setSelectedStampId: (id: string | null) => set({ selectedStampId: id }),
 }));
