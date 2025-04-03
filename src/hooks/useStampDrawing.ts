@@ -2,6 +2,11 @@ import { RefObject, useCallback, useEffect } from "react";
 import * as fabric from "fabric";
 import { useStore } from "@/store";
 import { createStampedPageImage } from "@/utils";
+import {
+  CANVAS_OBJECT_STYLES,
+  MAX_STAMP_SIZE,
+  STAMP_POSITION,
+} from "@/constants";
 
 interface StampData {
   instanceId: string;
@@ -160,7 +165,7 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
         const stampImage = new fabric.FabricImage(img);
 
         // 이미지 최대 크기 설정 (실제 도장 크기와 유사하게)
-        const maxSize = 40;
+        const maxSize = MAX_STAMP_SIZE;
 
         // 이미지 원본 크기 가져오기
         const imgWidth = img.width || 100;
@@ -175,8 +180,10 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
         const canvasHeight = canvas.height || 707;
 
         // 우하단에 위치 (여백 증가)
-        const left = canvasWidth - (imgWidth * scaleX) / 2 - 60;
-        const top = canvasHeight - (imgHeight * scaleY) / 2 - 60;
+        const left =
+          canvasWidth - (imgWidth * scaleX) / 2 - STAMP_POSITION.MARGIN;
+        const top =
+          canvasHeight - (imgHeight * scaleY) / 2 - STAMP_POSITION.MARGIN;
 
         // 도장 인스턴스 ID 생성
         const instanceId =
@@ -196,9 +203,9 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
           selectable: true,
           hasControls: true,
           hasBorders: true,
-          borderColor: "#2196F3",
-          cornerColor: "#2196F3",
-          cornerSize: 6,
+          borderColor: CANVAS_OBJECT_STYLES.BORDER_COLOR,
+          cornerColor: CANVAS_OBJECT_STYLES.CORNER_COLOR,
+          cornerSize: CANVAS_OBJECT_STYLES.CORNER_SIZE,
           transparentCorners: false,
         });
 

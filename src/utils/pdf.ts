@@ -3,6 +3,14 @@ import workerSrc from "pdfjs-dist/build/pdf.worker?url";
 import * as fabric from "fabric";
 import { PDFDocument } from "pdf-lib";
 import { StampInstance } from "@/types";
+import {
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  PDF_RENDER_SCALE,
+  PDF_IMAGE_QUALITY,
+  DOWNLOAD_FILE_PREFIX,
+  FILE_TYPES,
+} from "@/constants";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
@@ -14,7 +22,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
  */
 export const renderPageToImage = async (
   page: pdfjsLib.PDFPageProxy,
-  scale: number = 2
+  scale: number = PDF_RENDER_SCALE
 ): Promise<string> => {
   try {
     const viewport = page.getViewport({ scale });
@@ -49,8 +57,8 @@ export const createStampedPageImage = (canvas: fabric.Canvas): string => {
   try {
     return canvas.toDataURL({
       format: "png",
-      quality: 1,
-      multiplier: 0.5, // 미리보기용이므로 성능을 위해 크기 감소
+      quality: PDF_IMAGE_QUALITY.QUALITY,
+      multiplier: PDF_IMAGE_QUALITY.MULTIPLIER,
     });
   } catch (error) {
     console.error("캔버스 이미지 생성 실패:", error);
@@ -145,10 +153,8 @@ export const generatePdfWithStamps = async (
     const pages = pdfDoc.getPages();
 
     // fabricCanvas 크기
-    const FABRIC_CANVAS_WIDTH = 500;
-    const FABRIC_CANVAS_HEIGHT = parseFloat(
-      (FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2)
-    );
+    const FABRIC_CANVAS_WIDTH = CANVAS_WIDTH;
+    const FABRIC_CANVAS_HEIGHT = CANVAS_HEIGHT;
 
     // 페이지별로 도장 추가
     for (let i = 0; i < pages.length; i++) {
@@ -207,11 +213,11 @@ export const generatePdfWithStamps = async (
     });
 
     // 다운로드 링크 생성 및 클릭
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const blob = new Blob([pdfBytes], { type: FILE_TYPES.PDF });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `stamped_${originalFile.name}`;
+    link.download = `${DOWNLOAD_FILE_PREFIX}${originalFile.name}`;
     link.click();
 
     // 자원 해제

@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useStore } from "@/store";
 import { Stamp } from "@/types";
+import { MAX_STAMPS, FILE_TYPES } from "@/constants";
 
 export const useStampManager = () => {
   const { stamps, addStamp, removeStamp, selectedStampId, setSelectedStampId } =
@@ -17,9 +18,9 @@ export const useStampManager = () => {
     if (!files || files.length === 0) return;
 
     // 최대 5개 제한 검사
-    const availableSlots = 5 - stamps.length;
+    const availableSlots = MAX_STAMPS - stamps.length;
     if (availableSlots <= 0) {
-      alert("도장은 최대 5개까지 업로드 가능합니다.");
+      alert(`도장은 최대 ${MAX_STAMPS}개까지 업로드 가능합니다.`);
       e.target.value = "";
       return;
     }
@@ -32,7 +33,7 @@ export const useStampManager = () => {
       const file = files[i];
 
       // PNG 파일만 허용
-      if (!file.type.includes("png")) {
+      if (!file.type.includes(FILE_TYPES.PNG.split("/")[1])) {
         alert(
           `${file.name}은(는) PNG 파일이 아닙니다. PNG 파일만 업로드 가능합니다.`
         );
@@ -90,7 +91,7 @@ export const useStampManager = () => {
     handleFileChange,
     handleRemoveStamp,
     handleSelectStamp,
-    isMaxStampsReached: stamps.length >= 5,
+    isMaxStampsReached: stamps.length >= MAX_STAMPS,
   };
 };
 

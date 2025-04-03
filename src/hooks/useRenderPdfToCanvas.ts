@@ -2,12 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
 import { getPdfPagesAsImages } from "@/utils";
 import { useStore } from "@/store";
-
-// A4 비율로 캔버스 크기 지정 (가로:세로 = 1:√2)
-const FABRIC_CANVAS_WIDTH = 500;
-const FABRIC_CANVAS_HEIGHT = parseFloat(
-  (FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2)
-);
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "@/constants";
 
 /**
  * PDF 파일을 캔버스에 렌더링하는 커스텀 훅
@@ -75,8 +70,8 @@ const useRenderPdfToCanvas = (
     try {
       // 캔버스 초기화
       fabricCanvasRef.current = new fabric.Canvas(canvasRef.current, {
-        width: FABRIC_CANVAS_WIDTH,
-        height: FABRIC_CANVAS_HEIGHT,
+        width: CANVAS_WIDTH,
+        height: CANVAS_HEIGHT,
         selection: false,
       });
     } catch {
@@ -111,15 +106,15 @@ const useRenderPdfToCanvas = (
 
             // 캔버스 크기에 맞게 이미지 비율 계산
             const scale = Math.min(
-              FABRIC_CANVAS_WIDTH / imgElement.width,
-              FABRIC_CANVAS_HEIGHT / imgElement.height
+              CANVAS_WIDTH / imgElement.width,
+              CANVAS_HEIGHT / imgElement.height
             );
 
             // 이미지 스케일 및 위치 설정
             fabricImage.scale(scale);
             fabricImage.set({
-              left: FABRIC_CANVAS_WIDTH / 2,
-              top: FABRIC_CANVAS_HEIGHT / 2,
+              left: CANVAS_WIDTH / 2,
+              top: CANVAS_HEIGHT / 2,
               originX: "center",
               originY: "center",
               objectCaching: false,

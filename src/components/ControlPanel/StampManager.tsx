@@ -7,6 +7,7 @@ import {
   StampItem,
   DeleteButton,
 } from "./StampManager.styles";
+import { FILE_EXTENSIONS, MAX_STAMPS } from "@/constants";
 
 const StampManager = () => {
   const {
@@ -26,7 +27,7 @@ const StampManager = () => {
         <input
           ref={fileInputRef}
           type="file"
-          accept=".png"
+          accept={FILE_EXTENSIONS.PNG}
           onChange={handleFileChange}
           style={{ display: "none" }}
           multiple
@@ -40,7 +41,7 @@ const StampManager = () => {
             cursor: isMaxStampsReached ? "not-allowed" : "pointer",
           }}
         >
-          도장 업로드 ({stamps.length}/5)
+          도장 업로드 ({stamps.length}/{MAX_STAMPS})
         </StampButton>
       </StampUploadArea>
 

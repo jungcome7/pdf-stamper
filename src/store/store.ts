@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { Stamp, StampInstance } from "@/types";
+import { MAX_STAMPS } from "@/constants";
 
 // 페이지 이미지 타입 정의
 type PageImage = {
@@ -34,7 +35,10 @@ export const useStore = create<Store>((set, get) => ({
   stamps: [],
   addStamp: (stamp: Stamp) =>
     set((state) => ({
-      stamps: state.stamps.length < 5 ? [...state.stamps, stamp] : state.stamps,
+      stamps:
+        state.stamps.length < MAX_STAMPS
+          ? [...state.stamps, stamp]
+          : state.stamps,
     })),
   removeStamp: (id: string) =>
     set((state) => ({

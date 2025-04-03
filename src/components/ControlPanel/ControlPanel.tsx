@@ -10,7 +10,7 @@ import {
   Button,
   RemoveButton,
 } from "./ControlPanel.styles";
-import { STAMP_DRAW_EVENT } from "@/constants";
+import { STAMP_DRAW_EVENT, FILE_TYPES, FILE_EXTENSIONS } from "@/constants";
 
 const ControlPanel = () => {
   const { file, setFile, selectedStampId } = useStore();
@@ -23,7 +23,7 @@ const ControlPanel = () => {
       throw new Error("PDF 파일을 선택해주세요.");
     }
 
-    if (!file.type.includes("pdf")) {
+    if (!file.type.includes(FILE_TYPES.PDF)) {
       throw new Error("PDF 파일만 업로드 가능합니다.");
     }
 
@@ -64,7 +64,7 @@ const ControlPanel = () => {
             <input
               ref={pdfInputRef}
               type="file"
-              accept=".pdf,application/pdf"
+              accept={`${FILE_EXTENSIONS.PDF},${FILE_TYPES.PDF}`}
               onChange={handlePDFChange}
               style={{ display: "none" }}
             />
