@@ -8,8 +8,6 @@ interface UseStampDrawEventProps {
 
 /**
  * 도장 그리기 이벤트를 관리하는 커스텀 훅
- * @param isStampReady 도장이 준비되었는지 여부
- * @param addStampToCanvas 도장을 캔버스에 추가하는 함수
  */
 const useStampDrawEvent = ({
   isStampReady,

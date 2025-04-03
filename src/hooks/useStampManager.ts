@@ -13,17 +13,10 @@ export const useStampManager = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  /**
-   * 파일 업로드 인풋을 클릭하는 핸들러
-   */
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
 
-  /**
-   * 파일 선택 시 도장 이미지를 추가하는 핸들러
-   * @param e 파일 인풋 변경 이벤트
-   */
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
@@ -75,11 +68,6 @@ export const useStampManager = () => {
     e.target.value = "";
   };
 
-  /**
-   * 도장을 삭제하는 핸들러
-   * @param id 삭제할 도장의 ID
-   * @param e 이벤트 객체 (옵션)
-   */
   const handleRemoveStamp = (id: string, e?: React.MouseEvent) => {
     e?.stopPropagation();
 
@@ -90,10 +78,6 @@ export const useStampManager = () => {
     removeStamp(id);
   };
 
-  /**
-   * 도장을 선택하는 핸들러 (토글 방식)
-   * @param id 선택할 도장의 ID
-   */
   const handleSelectStamp = (id: string) => {
     setSelectedStampId(id === selectedStampId ? null : id);
   };

@@ -11,7 +11,11 @@ export const StampUploadArea = styled.div`
   min-height: 48px;
 `;
 
-export const StampButton = Button;
+export const StampButton = styled(Button)<{ isMaxStampsReached: boolean }>`
+  opacity: ${({ isMaxStampsReached }) => (isMaxStampsReached ? "0.6" : "1")};
+  cursor: ${({ isMaxStampsReached }) =>
+    isMaxStampsReached ? "not-allowed" : "pointer"};
+`;
 
 export const StampsContainer = styled.div`
   display: flex;

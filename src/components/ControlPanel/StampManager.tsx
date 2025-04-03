@@ -36,10 +36,7 @@ const StampManager = () => {
           type="button"
           onClick={handleUploadClick}
           disabled={isMaxStampsReached}
-          style={{
-            opacity: isMaxStampsReached ? "0.6" : "1",
-            cursor: isMaxStampsReached ? "not-allowed" : "pointer",
-          }}
+          isMaxStampsReached={isMaxStampsReached}
         >
           도장 업로드 ({stamps.length}/{MAX_STAMPS})
         </StampButton>

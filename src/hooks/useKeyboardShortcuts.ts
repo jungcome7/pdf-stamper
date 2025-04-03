@@ -6,7 +6,7 @@ interface UseKeyboardShortcutsProps {
 
 /**
  * 키보드 단축키를 관리하는 커스텀 훅
- * @param deleteSelectedObject 선택된 객체를 삭제하는 함수
+ * @param deleteSelectedObject
  */
 const useKeyboardShortcuts = ({
   deleteSelectedObject,
