@@ -1,5 +1,6 @@
 import * as pdfjsLib from "pdfjs-dist";
 import workerSrc from "pdfjs-dist/build/pdf.worker?url";
+import * as fabric from "fabric";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
@@ -34,6 +35,24 @@ export const renderPageToImage = async (
         error instanceof Error ? error.message : String(error)
       }`
     );
+  }
+};
+
+/**
+ * fabric.js 캔버스를 이미지 데이터 URL로 변환 (도장이 찍힌 페이지 이미지용)
+ * @param canvas fabric.js 캔버스 객체
+ * @returns 이미지 데이터 URL
+ */
+export const createStampedPageImage = (canvas: fabric.Canvas): string => {
+  try {
+    return canvas.toDataURL({
+      format: "png",
+      quality: 1,
+      multiplier: 0.5, // 미리보기용이므로 성능을 위해 크기 감소
+    });
+  } catch (error) {
+    console.error("캔버스 이미지 생성 실패:", error);
+    return "";
   }
 };
 

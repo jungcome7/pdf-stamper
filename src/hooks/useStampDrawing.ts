@@ -1,6 +1,7 @@
 import { RefObject, useCallback, useEffect } from "react";
 import * as fabric from "fabric";
 import { useStore } from "@/store";
+import { createStampedPageImage } from "@/utils";
 
 interface StampData {
   instanceId: string;
@@ -21,7 +22,18 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
     addStampInstance,
     removeStampInstance,
     getPageStampInstances,
+    updatePageImage,
   } = useStore();
+
+  const updateCurrentPageImage = useCallback(() => {
+    if (!fabricCanvasRef.current) return;
+
+    const imageUrl = createStampedPageImage(fabricCanvasRef.current);
+
+    if (imageUrl) {
+      updatePageImage(currentPage, imageUrl);
+    }
+  }, [fabricCanvasRef, currentPage, updatePageImage]);
 
   /**
    * 현재 페이지에 이미 찍힌 도장들 불러오기
@@ -98,6 +110,9 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
         scaleY: target.scaleY || 1,
         url: url,
       });
+
+      // 도장 위치/크기 변경 후 이미지 업데이트
+      updateCurrentPageImage();
     };
 
     // 객체 삭제 이벤트 - 도장 삭제 시 인스턴스도 삭제
@@ -113,6 +128,7 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
     addStampInstance,
     removeStampInstance,
     selectedStampId,
+    updateCurrentPageImage,
   ]);
 
   /**
@@ -202,11 +218,21 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
           scaleY: scaleY,
           url: selectedStamp.url,
         });
+
+        // 도장 추가 후 페이지 이미지 업데이트
+        updateCurrentPageImage();
       };
     } catch (error) {
       console.error("도장 추가 중 오류 발생:", error);
     }
-  }, [fabricCanvasRef, selectedStampId, stamps, currentPage, addStampInstance]);
+  }, [
+    fabricCanvasRef,
+    selectedStampId,
+    stamps,
+    currentPage,
+    addStampInstance,
+    updateCurrentPageImage,
+  ]);
 
   /**
    * 선택된 객체 삭제 함수
@@ -228,9 +254,11 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
       // 스토어에서 인스턴스 제거
       if (instanceId) {
         removeStampInstance(instanceId);
+        // 도장 삭제 후 페이지 이미지 업데이트
+        updateCurrentPageImage();
       }
     }
-  }, [fabricCanvasRef, removeStampInstance]);
+  }, [fabricCanvasRef, removeStampInstance, updateCurrentPageImage]);
 
   return {
     addStampToCanvas,

@@ -12,9 +12,10 @@ type PdfPage = {
  * @returns PDF 페이지 이미지 배열
  */
 const usePdfPages = () => {
-  const { file } = useStore();
+  const { file, pageImages } = useStore();
   const [pages, setPages] = useState<PdfPage[]>([]);
 
+  // 최초 PDF 파일 로딩 시 페이지 이미지 생성
   useEffect(() => {
     if (!file) {
       setPages([]);
@@ -30,6 +31,25 @@ const usePdfPages = () => {
       }
     })();
   }, [file]);
+
+  // pageImages에 변경이 있을 때 해당 페이지 이미지 업데이트
+  useEffect(() => {
+    if (pageImages.length === 0 || pages.length === 0) return;
+
+    // 도장이 찍힌 페이지 이미지로 업데이트
+    setPages((prevPages) => {
+      return prevPages.map((page) => {
+        // 해당 페이지의 업데이트된 이미지가 있는지 확인
+        const updatedPage = pageImages.find(
+          (p) => p.pageNumber === page.pageNumber
+        );
+        if (updatedPage) {
+          return { ...page, imageUrl: updatedPage.imageUrl };
+        }
+        return page;
+      });
+    });
+  }, [pageImages, pages.length]);
 
   return pages;
 };
