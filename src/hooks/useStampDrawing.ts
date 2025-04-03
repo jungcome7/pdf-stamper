@@ -56,7 +56,7 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
         img.onload = () => {
           if (!fabricCanvasRef.current) return;
 
-          const stampImage = new fabric.Image(img);
+          const stampImage = new fabric.FabricImage(img);
 
           // 객체에 데이터 추가를 위한 확장
           (stampImage as any).data = { instanceId: instance.id };
@@ -157,7 +157,7 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
 
       img.onload = () => {
         // 이미지 생성
-        const stampImage = new fabric.Image(img);
+        const stampImage = new fabric.FabricImage(img);
 
         // 이미지 최대 크기 설정 (실제 도장 크기와 유사하게)
         const maxSize = 40;
