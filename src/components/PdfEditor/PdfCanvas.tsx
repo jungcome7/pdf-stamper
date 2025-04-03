@@ -13,9 +13,10 @@ import {
 } from "./PdfCanvas.styles";
 import { useRenderPdfToCanvas, useStampDrawing } from "@/hooks";
 import { STAMP_DRAW_EVENT } from "@/constants";
+import { generatePdfWithStamps } from "@/utils";
 
 const PdfCanvas = () => {
-  const { file, selectedStampId } = useStore();
+  const { file, selectedStampId, stampInstances } = useStore();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { fabricCanvasRef, error, isLoading } = useRenderPdfToCanvas(
     file,
@@ -55,7 +56,16 @@ const PdfCanvas = () => {
   }, [deleteSelectedObject]);
 
   const handlePDFDownload = async () => {
-    // PDF 다운로드 로직 (미구현)
+    if (!file) {
+      alert("PDF 파일을 먼저 업로드해주세요.");
+      return;
+    }
+
+    try {
+      await generatePdfWithStamps(file, stampInstances);
+    } catch (error) {
+      alert(`PDF 다운로드 중 오류가 발생했습니다: ${error}`);
+    }
   };
 
   return (
