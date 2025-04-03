@@ -7,9 +7,9 @@ import { PageImage } from "@/types";
 
 /**
  * PDF 파일을 캔버스에 렌더링하는 커스텀 훅
- * @param file PDF 파일
- * @param canvasRef 캔버스 엘리먼트 ref
- * @returns 캔버스 참조와 오류 상태
+ * @param file PDF 파일 객체 또는 null
+ * @param canvasRef 캔버스 DOM 요소에 대한 ref
+ * @returns fabricCanvasRef, error, isLoading 상태를 포함하는 객체
  */
 const useRenderPdfToCanvas = (
   file: File | null,
@@ -21,7 +21,9 @@ const useRenderPdfToCanvas = (
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<PageImage[]>([]);
 
-  // PDF 페이지 가져오기
+  /**
+   * PDF 파일이 변경될 때 모든 페이지를 이미지로 변환
+   */
   useEffect(() => {
     if (!file) {
       setPages([]);
@@ -46,11 +48,12 @@ const useRenderPdfToCanvas = (
     loadPages();
   }, [file]);
 
-  // 캔버스에 현재 페이지 렌더링
+  /**
+   * 페이지 변경 또는 PDF 로드 시 현재 페이지를 캔버스에 렌더링
+   */
   useEffect(() => {
     if (!file || !canvasRef.current || pages.length === 0) return;
 
-    // 페이지 전환 시에도 로딩 표시
     setIsLoading(true);
     setError(null);
 
@@ -67,7 +70,6 @@ const useRenderPdfToCanvas = (
     }
 
     try {
-      // 캔버스 초기화
       fabricCanvasRef.current = new fabric.Canvas(canvasRef.current, {
         width: CANVAS_WIDTH,
         height: CANVAS_HEIGHT,
@@ -103,13 +105,11 @@ const useRenderPdfToCanvas = (
           try {
             const fabricImage = new fabric.FabricImage(imgElement);
 
-            // 캔버스 크기에 맞게 이미지 비율 계산
             const scale = Math.min(
               CANVAS_WIDTH / imgElement.width,
               CANVAS_HEIGHT / imgElement.height
             );
 
-            // 이미지 스케일 및 위치 설정
             fabricImage.scale(scale);
             fabricImage.set({
               left: CANVAS_WIDTH / 2,
@@ -119,7 +119,6 @@ const useRenderPdfToCanvas = (
               objectCaching: false,
             });
 
-            // 캔버스에 이미지 표시
             fabricCanvasRef.current.backgroundImage = fabricImage;
             fabricCanvasRef.current.renderAll();
             setIsLoading(false);

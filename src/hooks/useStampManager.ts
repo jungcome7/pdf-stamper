@@ -3,21 +3,31 @@ import { useStore } from "@/store";
 import { Stamp } from "@/types";
 import { MAX_STAMPS, FILE_TYPES } from "@/constants";
 
+/**
+ * 도장 관리를 위한 커스텀 훅
+ * @returns 도장 관리에 필요한 상태와 메서드들을 포함하는 객체
+ */
 export const useStampManager = () => {
   const { stamps, addStamp, removeStamp, selectedStampId, setSelectedStampId } =
     useStore();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  /**
+   * 파일 업로드 인풋을 클릭하는 핸들러
+   */
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
 
+  /**
+   * 파일 선택 시 도장 이미지를 추가하는 핸들러
+   * @param e 파일 인풋 변경 이벤트
+   */
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    // 최대 5개 제한 검사
     const availableSlots = MAX_STAMPS - stamps.length;
     if (availableSlots <= 0) {
       alert(`도장은 최대 ${MAX_STAMPS}개까지 업로드 가능합니다.`);
@@ -25,14 +35,12 @@ export const useStampManager = () => {
       return;
     }
 
-    // 여러 파일 처리
     const filesToProcess = Math.min(availableSlots, files.length);
     const filePromises: Promise<string>[] = [];
 
     for (let i = 0; i < filesToProcess; i++) {
       const file = files[i];
 
-      // PNG 파일만 허용
       if (!file.type.includes(FILE_TYPES.PNG.split("/")[1])) {
         alert(
           `${file.name}은(는) PNG 파일이 아닙니다. PNG 파일만 업로드 가능합니다.`
@@ -40,7 +48,6 @@ export const useStampManager = () => {
         continue;
       }
 
-      // 파일을 데이터 URL로 변환하는 Promise 생성
       const promise = new Promise<string>((resolve) => {
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -54,7 +61,6 @@ export const useStampManager = () => {
       filePromises.push(promise);
     }
 
-    // 모든 파일 처리가 완료되면 도장 추가
     Promise.all(filePromises).then((urls) => {
       urls.forEach((url) => {
         const newStamp: Stamp = {
@@ -69,6 +75,11 @@ export const useStampManager = () => {
     e.target.value = "";
   };
 
+  /**
+   * 도장을 삭제하는 핸들러
+   * @param id 삭제할 도장의 ID
+   * @param e 이벤트 객체 (옵션)
+   */
   const handleRemoveStamp = (id: string, e?: React.MouseEvent) => {
     e?.stopPropagation();
 
@@ -79,6 +90,10 @@ export const useStampManager = () => {
     removeStamp(id);
   };
 
+  /**
+   * 도장을 선택하는 핸들러 (토글 방식)
+   * @param id 선택할 도장의 ID
+   */
   const handleSelectStamp = (id: string) => {
     setSelectedStampId(id === selectedStampId ? null : id);
   };

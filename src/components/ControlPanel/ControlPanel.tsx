@@ -86,7 +86,6 @@ const ControlPanel = () => {
           </PdfFileArea>
         </div>
 
-        {/* 도장 관리 컴포넌트 */}
         <StampManager />
       </TopSection>
 

@@ -59,10 +59,7 @@ const PdfCanvas = () => {
   return (
     <Container>
       <CanvasWrapper>
-        <Canvas
-          ref={canvasRef}
-          tabIndex={0} // 캔버스가 키보드 이벤트를 받을 수 있도록 함
-        />
+        <Canvas ref={canvasRef} />
 
         {isLoading && (
           <LoadingOverlay>

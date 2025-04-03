@@ -6,10 +6,14 @@ interface UseKeyboardShortcutsProps {
 
 /**
  * 키보드 단축키를 관리하는 커스텀 훅
+ * @param deleteSelectedObject 선택된 객체를 삭제하는 함수
  */
 const useKeyboardShortcuts = ({
   deleteSelectedObject,
 }: UseKeyboardShortcutsProps) => {
+  /**
+   * 키보드 이벤트 리스너 등록 및 정리
+   */
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Backspace" || e.key === "Delete") {
