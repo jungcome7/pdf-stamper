@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { useStore } from "@/store";
 
 import {
@@ -11,8 +11,12 @@ import {
   LoadingMessage,
   ErrorIcon,
 } from "./PdfCanvas.styles";
-import { useRenderPdfToCanvas, useStampDrawing } from "@/hooks";
-import { STAMP_DRAW_EVENT } from "@/constants";
+import {
+  useRenderPdfToCanvas,
+  useStampDrawing,
+  useStampDrawEvent,
+  useKeyboardShortcuts,
+} from "@/hooks";
 import { generatePdfWithStamps } from "@/utils";
 
 const PdfCanvas = () => {
@@ -25,35 +29,19 @@ const PdfCanvas = () => {
   const { addStampToCanvas, deleteSelectedObject } =
     useStampDrawing(fabricCanvasRef);
 
-  useEffect(() => {
-    const handleStampDrawEvent = () => {
-      if (selectedStampId && fabricCanvasRef.current) {
-        addStampToCanvas();
-      }
-    };
+  const isStampReady =
+    selectedStampId !== null &&
+    selectedStampId !== undefined &&
+    fabricCanvasRef.current !== null;
 
-    document.addEventListener(STAMP_DRAW_EVENT, handleStampDrawEvent);
+  useStampDrawEvent({
+    isStampReady,
+    addStampToCanvas,
+  });
 
-    return () => {
-      document.removeEventListener(STAMP_DRAW_EVENT, handleStampDrawEvent);
-    };
-  }, [selectedStampId, fabricCanvasRef, addStampToCanvas]);
-
-  // 키보드 단축키 이벤트 처리
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Backspace" || e.key === "Delete") {
-        e.preventDefault();
-        deleteSelectedObject();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [deleteSelectedObject]);
+  useKeyboardShortcuts({
+    deleteSelectedObject,
+  });
 
   const handlePDFDownload = async () => {
     if (!file) {
