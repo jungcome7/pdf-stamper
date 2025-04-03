@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import Stamp1 from "@/assets/stamp-1.jpg";
 import { Stamp, StampInstance } from "@/types";
 
 // 페이지 이미지 타입 정의
@@ -41,7 +40,7 @@ export const useStore = create<Store>((set, get) => ({
     set({ requestedPage: pageNumber }),
   isRendering: false,
   setIsRendering: (isRendering: boolean) => set({ isRendering }),
-  stamps: [{ id: "default", url: Stamp1 }],
+  stamps: [],
   addStamp: (stamp: Stamp) =>
     set((state) => ({
       stamps: state.stamps.length < 5 ? [...state.stamps, stamp] : state.stamps,
