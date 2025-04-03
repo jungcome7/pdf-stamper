@@ -1,3 +1,23 @@
+## 과제 구현 설명
+
+- React와 TypeScript를 기반으로 PDF 전자도장 프로젝트를 구현했습니다. PDF 문서에 도장 이미지를 추가하고, 위치를 조정한 후 최종 문서를 다운로드할 수 있는 기능을 제공합니다.
+- 프로젝트 폴더 구조는 아래와 같습니다.
+  ```src/
+  ├── components/ - UI 컴포넌트
+  ├── hooks/ - 커스텀 훅
+  ├── utils/ - 유틸리티 함수
+  ├── types/ - 타입 정의
+  ├── constants/ - 상수 정의
+  ├── store/ - 전역 상태 관리
+  └── styles/ - 전역 스타일
+  ```
+- 커스텀 훅을 적극 활용해 UI와 비즈니스 로직을 분리했습니다. `useRenderPdfToCanvas`는 PDF 파일을 캔버스에 렌더링하고, `usePdfPages`는 페이지 이미지를 관리합니다. `useStampManager`는 도장 이미지 관리 기능을, `useStampDrawing`은 캔버스에 도장 추가 기능을 제공합니다. 또한 `useKeyboardShortcuts`로 단축키를 지원합니다.
+- PDF 처리 과정의 예외 상황은 try-catch로 관리합니다. 오류 발생 시 필요한 경우 사용자에게 피드백을 제공합니다. PDF와 PNG 파일 형식을 검증하고 도장 개수를 최대 5개로 제한합니다. PDF 로딩 중에는 로딩 상태를 표시해 사용자에게 진행 상황을 알립니다.
+- Emotion을 사용해 컴포넌트별로 스타일을 모듈화했습니다. 각 컴포넌트는 자체 .styles.ts 파일을 가지며, props를 통한 조건부 스타일링을 구현했습니다. 전역 스타일은 global.ts에서 관리합니다.
+- 실행 커멘드
+  - `npm run start:dev`
+  - `npm run start:prod`
+
 ## [팀리부뜨] 프론트엔드 사전 과제
 
 ## 사전 과제 안내
