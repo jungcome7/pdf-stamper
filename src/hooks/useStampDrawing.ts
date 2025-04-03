@@ -1,4 +1,4 @@
-import { RefObject, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import * as fabric from "fabric";
 import { useStore } from "@/store";
 import { createStampedPageImage } from "@/utils";
@@ -7,20 +7,16 @@ import {
   MAX_STAMP_SIZE,
   STAMP_POSITION,
 } from "@/constants";
-import { StampInstance } from "@/types";
+import {
+  StampInstance,
+  FabricEvent,
+  FabricCanvasRef,
+  StampImageCreator,
+  Scale,
+  Position,
+} from "@/types";
 
-interface StampData {
-  instanceId: string;
-}
-
-type FabricEvent = {
-  target?: fabric.Object & {
-    data?: StampData;
-    getSrc?: () => string;
-  };
-};
-
-const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
+const useStampDrawing = (fabricCanvasRef: FabricCanvasRef) => {
   const {
     stamps,
     selectedStampId,
@@ -42,10 +38,7 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
   }, [fabricCanvasRef, currentPage, updatePageImage]);
 
   const createStampImageFromInstance = useCallback(
-    (
-      instance: StampInstance,
-      onLoad: (stampImage: fabric.FabricImage) => void
-    ) => {
+    (instance: StampInstance, onLoad: StampImageCreator) => {
       const img = new Image();
       img.crossOrigin = "anonymous";
       img.src = instance.url;
@@ -145,7 +138,7 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
   }, [fabricCanvasRef, loadPageStamps, handleStampModified]);
 
   const calculateStampScale = useCallback(
-    (imgWidth: number, imgHeight: number) => {
+    (imgWidth: number, imgHeight: number): Scale => {
       const scaleX = Math.min(
         MAX_STAMP_SIZE / imgWidth,
         MAX_STAMP_SIZE / imgHeight
@@ -160,8 +153,8 @@ const useStampDrawing = (fabricCanvasRef: RefObject<fabric.Canvas | null>) => {
       canvas: fabric.Canvas,
       imgWidth: number,
       imgHeight: number,
-      scale: { scaleX: number; scaleY: number }
-    ) => {
+      scale: Scale
+    ): Position => {
       const canvasWidth = canvas.width || 500;
       const canvasHeight = canvas.height || 707;
 

@@ -3,6 +3,7 @@ import * as fabric from "fabric";
 import { getPdfPagesAsImages } from "@/utils";
 import { useStore } from "@/store";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "@/constants";
+import { PageImage } from "@/types";
 
 /**
  * PDF 파일을 캔버스에 렌더링하는 커스텀 훅
@@ -18,9 +19,7 @@ const useRenderPdfToCanvas = (
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
   const [error, setError] = useState<{ message: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [pages, setPages] = useState<
-    { pageNumber: number; imageUrl: string }[]
-  >([]);
+  const [pages, setPages] = useState<PageImage[]>([]);
 
   // PDF 페이지 가져오기
   useEffect(() => {

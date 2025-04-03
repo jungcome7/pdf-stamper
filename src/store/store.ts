@@ -1,31 +1,6 @@
 import { create } from "zustand";
-import { Stamp, StampInstance } from "@/types";
+import { Stamp, StampInstance, Store } from "@/types";
 import { MAX_STAMPS } from "@/constants";
-
-// 페이지 이미지 타입 정의
-type PageImage = {
-  pageNumber: number;
-  imageUrl: string;
-};
-
-type Store = {
-  file: File | null;
-  setFile: (file: File | null) => void;
-  currentPage: number;
-  setCurrentPage: (pageNumber: number) => void;
-  stamps: Stamp[];
-  addStamp: (stamp: Stamp) => void;
-  removeStamp: (id: string) => void;
-  selectedStampId: string | null;
-  setSelectedStampId: (id: string | null) => void;
-  stampInstances: StampInstance[];
-  addStampInstance: (instance: StampInstance) => void;
-  removeStampInstance: (instanceId: string) => void;
-  getPageStampInstances: (pageNumber: number) => StampInstance[];
-  // 페이지 이미지 관련 상태 및 함수
-  pageImages: PageImage[];
-  updatePageImage: (pageNumber: number, imageUrl: string) => void;
-};
 
 export const useStore = create<Store>((set, get) => ({
   file: null,
@@ -62,7 +37,6 @@ export const useStore = create<Store>((set, get) => ({
       (instance) => instance.pageNumber === pageNumber
     );
   },
-  // 페이지 이미지 상태 및 업데이트 함수
   pageImages: [],
   updatePageImage: (pageNumber: number, imageUrl: string) =>
     set((state) => ({
