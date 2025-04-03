@@ -26,7 +26,6 @@ export const renderPageToImage = async (
 ): Promise<string> => {
   try {
     const viewport = page.getViewport({ scale });
-
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
 
@@ -80,7 +79,6 @@ export const getPdfPagesAsImages = async (
     pdfUrl = URL.createObjectURL(file);
     const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
     const totalPages = pdf.numPages;
-
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     const pagePromises = pageNumbers.map(async (pageNumber) => {
@@ -89,9 +87,7 @@ export const getPdfPagesAsImages = async (
       return { pageNumber, imageUrl };
     });
 
-    const results = await Promise.all(pagePromises);
-
-    return results;
+    return await Promise.all(pagePromises);
   } catch {
     return [];
   } finally {
@@ -143,9 +139,6 @@ export const generatePdfWithStamps = async (
     const pdfDoc = await PDFDocument.load(arrayBuffer);
     const pages = pdfDoc.getPages();
 
-    const FABRIC_CANVAS_WIDTH = CANVAS_WIDTH;
-    const FABRIC_CANVAS_HEIGHT = CANVAS_HEIGHT;
-
     for (let i = 0; i < pages.length; i++) {
       const page = pages[i];
       const pageNumber = i + 1;
@@ -157,22 +150,22 @@ export const generatePdfWithStamps = async (
 
       const { width, height } = page.getSize();
 
-      const scaleX = width / FABRIC_CANVAS_WIDTH;
-      const scaleY = height / FABRIC_CANVAS_HEIGHT;
+      // 캔버스와 PDF 사이의 비율 계산
+      const scaleX = width / CANVAS_WIDTH;
+      const scaleY = height / CANVAS_HEIGHT;
 
+      // 페이지의 각 도장 추가
       for (const stamp of pageStamps) {
         try {
           const stampImageBytes = base64ToUint8Array(stamp.url);
           const stampImage = await pdfDoc.embedPng(stampImageBytes);
 
-          const stampLeft = stamp.left * scaleX;
-          const stampTop = stamp.top * scaleY;
           const stampWidth = stampImage.width * stamp.scaleX * scaleX;
           const stampHeight = stampImage.height * stamp.scaleY * scaleY;
 
           // PDF 좌표계 변환 (왼쪽 하단 원점)
-          const stampX = stampLeft - stampWidth / 2;
-          const stampY = height - stampTop - stampHeight / 2;
+          const stampX = stamp.left * scaleX - stampWidth / 2;
+          const stampY = height - stamp.top * scaleY - stampHeight / 2;
 
           page.drawImage(stampImage, {
             x: stampX,
@@ -196,7 +189,6 @@ export const generatePdfWithStamps = async (
     link.href = url;
     link.download = `${DOWNLOAD_FILE_PREFIX}${originalFile.name}`;
     link.click();
-
     URL.revokeObjectURL(url);
   } catch (error) {
     console.error("PDF 생성 중 오류 발생:", error);
