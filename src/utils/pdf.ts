@@ -8,7 +8,7 @@ import {
   CANVAS_HEIGHT,
   PDF_RENDER_SCALE,
   PDF_IMAGE_QUALITY,
-  DOWNLOAD_FILE_PREFIX,
+  getDownloadFileName,
   FILE_TYPES,
 } from "@/constants";
 
@@ -187,7 +187,7 @@ export const generatePdfWithStamps = async (
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${DOWNLOAD_FILE_PREFIX}${originalFile.name}`;
+    link.download = getDownloadFileName(originalFile.name);
     link.click();
     URL.revokeObjectURL(url);
   } catch (error) {

@@ -8,4 +8,21 @@ export const FILE_EXTENSIONS = {
   PNG: ".png",
 };
 
-export const DOWNLOAD_FILE_PREFIX = "stamped_";
+export const getDownloadFileName = (originalFileName: string): string => {
+  const now = new Date();
+  const dateTime = now
+    .toISOString()
+    .replace(/[-:]/g, "")
+    .replace("T", "_")
+    .split(".")[0];
+
+  const lastDotIndex = originalFileName.lastIndexOf(".");
+  const name =
+    lastDotIndex !== -1
+      ? originalFileName.substring(0, lastDotIndex)
+      : originalFileName;
+  const extension =
+    lastDotIndex !== -1 ? originalFileName.substring(lastDotIndex) : "";
+
+  return `${name}_${dateTime}${extension}`;
+};
