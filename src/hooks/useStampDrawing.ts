@@ -14,6 +14,9 @@ import {
   StampImageCreator,
   Scale,
   Position,
+  FabricStampImage,
+  FabricEventHandler,
+  FabricObjectWithData,
 } from "@/types";
 
 /**
@@ -59,8 +62,8 @@ const useStampDrawing = (fabricCanvasRef: FabricCanvasRef) => {
       img.onload = () => {
         if (!fabricCanvasRef.current) return;
 
-        const stampImage = new fabric.FabricImage(img);
-        (stampImage as any).data = { instanceId: instance.id };
+        const stampImage = new fabric.FabricImage(img) as FabricStampImage;
+        stampImage.data = { instanceId: instance.id };
 
         stampImage.set({
           left: instance.left,
@@ -110,7 +113,7 @@ const useStampDrawing = (fabricCanvasRef: FabricCanvasRef) => {
    * 도장 객체가 수정되었을 때 처리하는 이벤트 핸들러
    * @param e Fabric 이벤트 객체
    */
-  const handleStampModified = useCallback(
+  const handleStampModified: FabricEventHandler = useCallback(
     (e: FabricEvent) => {
       const target = e.target;
       if (!target) return;
@@ -153,10 +156,10 @@ const useStampDrawing = (fabricCanvasRef: FabricCanvasRef) => {
 
     loadPageStamps();
 
-    canvas.on("object:modified", handleStampModified as any);
+    canvas.on("object:modified", handleStampModified);
 
     return () => {
-      canvas.off("object:modified", handleStampModified as any);
+      canvas.off("object:modified", handleStampModified);
     };
   }, [fabricCanvasRef, loadPageStamps, handleStampModified]);
 
@@ -231,7 +234,7 @@ const useStampDrawing = (fabricCanvasRef: FabricCanvasRef) => {
       img.src = selectedStamp.url;
 
       img.onload = () => {
-        const stampImage = new fabric.FabricImage(img);
+        const stampImage = new fabric.FabricImage(img) as FabricStampImage;
 
         const imgWidth = img.width || 100;
         const imgHeight = img.height || 100;
@@ -247,7 +250,7 @@ const useStampDrawing = (fabricCanvasRef: FabricCanvasRef) => {
 
         const instanceId = generateStampInstanceId();
 
-        (stampImage as any).data = { instanceId };
+        stampImage.data = { instanceId };
 
         stampImage.set({
           left: position.left,
@@ -304,10 +307,10 @@ const useStampDrawing = (fabricCanvasRef: FabricCanvasRef) => {
     if (!fabricCanvasRef.current) return;
 
     const canvas = fabricCanvasRef.current;
-    const activeObject = canvas.getActiveObject();
+    const activeObject = canvas.getActiveObject() as FabricObjectWithData;
 
     if (activeObject) {
-      const instanceId = (activeObject as any).data?.instanceId;
+      const instanceId = activeObject.data?.instanceId;
 
       canvas.remove(activeObject);
       canvas.renderAll();
